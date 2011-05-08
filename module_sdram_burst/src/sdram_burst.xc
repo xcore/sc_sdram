@@ -75,7 +75,8 @@ static void uswait(int us)
 static void init()
 {
 	p_sdram_addr <: 0;
-	p_sdram_addr0:1 <: 0;
+	partout(p_sdram_addr0,1,0);
+
 	sync(p_sdram_addr);
 
 	set_port_clock(p_sdram_clk, b_sdram_clk);
@@ -123,15 +124,18 @@ static void init()
 
 	// Initialise all signals to 0 except command lines (INHIBIT)
 	p_sdram_cke <: 0;
-	p_sdram_cmd:4 <: 0xF;
+	partout(p_sdram_cmd,4,0xF);
+
 	p_sdram_dq <: 0;
 	p_sdram_addr <: 0;
-	p_sdram_addr0:1 <: 0;
+	partout(p_sdram_addr0,1,0);
+
 	p_sdram_ba0 <: 0;
 	p_sdram_ba1 <: 0;
 	p_sdram_dqm0 <: 0;
 	p_sdram_dqm1 <: 0;
-	p_sdram_gate:1 <: 1;
+	partout(p_sdram_gate,1,1);
+
 
 	// Start clock and provide 100us for SDRAM start up
 	// Assert CKE in between
@@ -154,15 +158,17 @@ static void init()
 	p_sdram_cmd <: 0xE2FFFF28;
 
 	sync(p_sdram_cmd);
-	p_sdram_gate:1 <: 0;
+	partout(p_sdram_gate,1,0);
 
 	// Program mode register: CL3, sequential, continuous burst (0x37)
 	// Value A=0x37 is bitrev(0x1B) on addr and 1 on addr0
-	p_sdram_cmd:16 <: 0xEE0E;
-	p_sdram_addr0:1 <: 1;
+	partout(p_sdram_cmd,16,0xEE0E);
+	partout(p_sdram_addr0,1,1);
+
 	p_sdram_addr <: bitrev(0x1B);
 	p_sdram_gate <: 0b1111;
-	p_sdram_gate:1 <: 0;
+	partout(p_sdram_gate,1,0);
+
 	sync(p_sdram_gate);
 
 	set_thread_fast_mode_on();
@@ -192,7 +198,9 @@ static void refresh()
 	p_sdram_cmd <: 0xEEE2EE2E;
 	p_sdram_gate <: 0b1111;
 	p_sdram_gate <: 0b1111;
-	p_sdram_gate:1 <: 0;
+	partout(p_sdram_gate,1,0);
+
+
 }
 
 void sdram_init(chanend server)
@@ -262,7 +270,8 @@ void sdram_server(chanend client)
           p_sdram_addr0 <: (row & 1) << 1;
           p_sdram_addr <: 0;
           p_sdram_addr <: bitrev(row >> 1);
-          p_sdram_cmd:16 <: 0xE4AE;
+          partout(p_sdram_cmd,16,0xE4AE);
+
           p_sdram_dq <: 0;
           p_sdram_gate:1 <: 0 @ t;
           t += 12;
@@ -314,7 +323,7 @@ void sdram_server(chanend client)
           p_sdram_addr0 <: (row & 1) << 1;
           p_sdram_addr <: 0;
           p_sdram_addr <: bitrev(row >> 1);
-          p_sdram_cmd:16 <: 0xE6AE;
+          partout(p_sdram_cmd, 16, 0xE6AE);
           p_sdram_gate:1 <: 0 @ t0;
           t0 += 12;
           t1 = t0 + 4;
