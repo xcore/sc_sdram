@@ -57,12 +57,14 @@ void traffic_pausable(chanend t)
     select
     {
       case t :> active: break;
-      active => default:
+      default:
       {
-        unsigned y = x[(i - 1) & 7];
-        crc32(y, 0x48582BAC, 0xFAC91003);
-        x[i & 7] = y;
-        i++;
+    	if (active) {
+			unsigned y = x[(i - 1) & 7];
+			crc32(y, 0x48582BAC, 0xFAC91003);
+			x[i & 7] = y;
+			i++;
+			}
         break;
       }
     }
