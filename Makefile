@@ -40,12 +40,12 @@
 # This variable should contain a space separated list of all
 # the directories containing buildable applications (usually
 # prefixed with the app_ prefix)
-BUILD_SUBDIRS = app_template
+BUILD_SUBDIRS = app_sdram_burst_example
 
 # This variable should contain a space separated list of all
 # the directories containing buildable plugins (usually
 # prefixed with the plugin_ prefix)
-PLUGIN_SUBDIRS = plugin_template
+PLUGIN_SUBDIRS = 
 
 # This variable should contain a space separated list of all
 # the directories containing applications with a 'test' make target

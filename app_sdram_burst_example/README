@@ -1,0 +1,26 @@
+Demo
+
+This code provides a demo use of the SDRAM driver. It just runs some
+writing and reading tests.
+
+Hardware
+
+This demo is designed for an XDK attached to a board containing the
+following SDRAM.
+
+Micron MT48LC16M16A2P-75 256Mb (32MB) as 4M x 16b x 4 banks leadfree
+54pin TSOP 7.5ns CL3 PC133 (class 75) 3.3V
+
+Many other Micron's SDRAMs should work with minor code changes as well
+as other manufacturers devices (like Samsung). Some of the signal
+mappings are unusual, mainly to cater for IO availibility on the Dev
+Kit's expansion ports (see portmap). For example, for low pin count,
+the 4-bit version (16M x 4b x 4 banks) can be used with small changes
+to the code.
+
+Other files:
+
+          SDRAM_photo.png     : A photo of an XDK connected to a SDRAM board
+          SDRAM_schematic.pdf : The schematic for a pcb containing the SDRAM
+                                connected to an XSYS connector
+          SDRAM_portmap.pdf   : The portmap for the above schematic 

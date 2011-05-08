@@ -1,0 +1,47 @@
+SDRAM Burst driver
+------------------
+
+This code provides an SDRAM bust access driver for XCore.The SDRAM is
+attached to an XCore via XCore ports. This allows 1 XCore thread to
+read/write to the SDRAM. XCore reads/writes to SDRAM at application
+level via explicit sdram_read/sdram_write function calls. XMOS
+development tools treat external memory as any other IO
+peripheral. Therefore this external memory is data-only and there is
+clear separation of internal and external memory in application source
+code. XMOS tools might be extended in the future to support compiler
+optimisations based on external memory usage profile for a particular
+application. Currently external memory usage profile is part of
+application software design.
+
+The burst driver isoptimised for burst access. 
+It has a sdram_write and sdram_read functions that write/read a
+block of 32-bit words. Address is specified as bank, row and
+column. Driver is not responsible for refreshing, application must
+call sdram_refresh at required frequency (this is to avoid "hidden"
+delays). Overlapping reads/writes are not supported, one row and one
+only is activated and precharged per call. Burst driver operates at
+25MHz CL3, but there is room for improvement by going up to
+33MHz. This driver is intended for applications where SDRAM is managed
+by a single thread and access requirements are very contiguous.
+
+Performance
+-----------
+
+16-bit
+
+Peak write rate burst driver: 50MB/s 
+Peak read rate burst driver: 50MB/s 
+Single word write (3 threads) burst driver: 3120ns 
+Single word read (3 threads) burst driver: 3520ns
+
+4-bit
+
+Peak write rate burst driver: 12.5MB/s 
+Peak read rate burst driver: 12.5MB/s 
+Single word write (4 threads) burst driver: approx 2.5us
+Single word read (4 threads) burst driver: approx 3us 
+
+Code size and thread count
+--------------------------
+
+burst driver: 2KB, 1 thread 

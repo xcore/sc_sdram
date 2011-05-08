@@ -7,3 +7,5 @@
 *.xi
 *.i
 *.a
+.DS_Store
+*~
