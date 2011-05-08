@@ -273,13 +273,15 @@ void sdram_server(chanend client)
           partout(p_sdram_cmd,16,0xE4AE);
 
           p_sdram_dq <: 0;
-          p_sdram_gate:1 <: 0 @ t;
+          partout_timed(p_sdram_gate, 1, 0, t);
+
           t += 12;
-          p_sdram_gate:1 @ t <: 1;  // IO: kick off
+          partout_timed(p_sdram_gate, 1, 1, t);   // IO: kick off
           t += dt;
           p_sdram_dqm0 @ t <: 0b0001;
           p_sdram_dqm1 @ t <: 0b0001;
-          p_sdram_cmd:8 @ t <: 0xE8;
+          partout_timed(p_sdram_cmd, 8, 0xE8, t);
+
           client :> x;
           p_sdram_dq <: x;          // IO: first data
           client :> x;
@@ -324,14 +326,14 @@ void sdram_server(chanend client)
           p_sdram_addr <: 0;
           p_sdram_addr <: bitrev(row >> 1);
           partout(p_sdram_cmd, 16, 0xE6AE);
-          p_sdram_gate:1 <: 0 @ t0;
+          partout_timed(p_sdram_gate, 1, 0, t0);
           t0 += 12;
           t1 = t0 + 4;
           t2 = t0 + dt;
           p_sdram_dqm0 @ t2 <: 0b0010;
           p_sdram_dqm1 @ t2 <: 0b0010;
           p_sdram_gate @ t0 <: 0b1111;  // IO: kick off
-          p_sdram_cmd:8 @ t2 <: 0xE8;
+          partout_timed(p_sdram_cmd, 8, 0xE8, t2);
           p_sdram_addr <: colw;         // IO: address
           p_sdram_dq @ t1 :> int pre_data;
           p_sdram_gate @ (t2 + 5) <: 0;
