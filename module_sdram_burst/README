@@ -1,7 +1,7 @@
 SDRAM Burst driver
 ------------------
 
-This code provides an SDRAM bust access driver for XCore.The SDRAM is
+This code provides an SDRAM burst access driver for XCore.The SDRAM is
 attached to an XCore via XCore ports. This allows 1 XCore thread to
 read/write to the SDRAM. XCore reads/writes to SDRAM at application
 level via explicit sdram_read/sdram_write function calls. XMOS
