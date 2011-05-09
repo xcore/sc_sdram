@@ -1,66 +1,56 @@
-XCore Template HOWTO
-====================
+XCORE.com SDRAM SOFTWARE COMPONENT
+..................................
 
-This repository provides a template for new repositories on the XCore
-open source github repository site.
-To create a new repository using this template
-use the following steps. 
+:Stable release:  1.2 unreleased - based on SDRAM 1.1 of April 2010
 
-You can use these steps to create a local project to start coding your
-own stuff. Later you may create an  empty repository on the XCore open
-source github site (see
-https://github.com/xcore/Community/wiki/Repository-management on how 
-to do this) to share this with the world.
+:Status:  Initial updates to current tools, pending testing. 
 
-Requirements
-------------
+:Maintainer:  `Russ Ferriday <https://github.com/topiaruss>`_ 
 
-* Git installed locally
-* Python installed locally (version 2.7)
-* An new empty github repository
-* A github account with ssh keys generated (see "Generate a Keypair" at http://help.github.com/)
+:Description:  A Burst Mode access driver for the Micron Technology
+ MT48LC16M16A2 Synchronous DRAM
 
-Steps for creating a new repository/project
--------------------------------------------
 
-#. Create a working directory (or use an existing one with other repositories in).
+Key Features
+============
 
-#. If it does not already exist, clone the xcommon repository from github::
+  * One thread reads/writes data to SDRAM
+  * Optimised for burst access of blocks of 32 bit words (not for random access)
+  * Application retains control of refresh by calling sdram_refresh at
+    appropriate to prevent unexpected delays
+  * 16-bit - Peak write: 50MB/s, read 50MB/s. 
+    Single word write  (3 threads): 3120ns, read 3520ns.
+  * 4-bit -   Peak write: 12.5MB/s, read 12.5MB/s.
+    Single word write (4 threads): approx 2.5us, approx 3us. 
+  * Code size: 2KB
+  * Thread count: 1
 
-     git clone ssh://git@github.com/xcore/xcommon.git
+To Do
+=====
 
-#. Clone the xcore_template repository from github::
+* Test on representative hardware. 
+* Document test procedure and check schematics
+* Resolve two warnings related to buffered port
+* Improve documentation for integrators
 
-     git clone ssh://git@github.com/xcore/xcore_template.git
+Firmware Overview
+=================
 
-#. Use the rename_repository script to rename xcore_template to your repository name. Run this script from the working directory above the xcore_template directory. For example to change the name to my_repo::
-
-     python xcommon/util/rename_repository.py xcore_template my_repo
-
-#. You can now change into the new my_repo directory::
-
-     cd my_repo
-
-   this will have its origin pointing at xcore/my_repo on github.
-
-#. Either copy/modify the app_template, plugin_template and module_template directories to contain the source code for the apps, modules and plugins of the repository. Or copy in existing apps and modules from elsewhere. Make sure that any copied in directories have Makefiles/module_build_infos in a similar form to the template examples. Pay particular attention to the include part of an application Makefile. It should look like this::
-
-   -include ../module_xcommon/build/Makefile.common
-   -include ../../xcommon/module_xcommon/build/Makefile.common
-
-#. Once you have your specific modules set up you can remove the template directories.
+ * module_sdram_burst: the burst mode driver
+ * app_sdram_burst_example: contains a c client and an xc test harness
  
-#. Code away.
+Known Issues
+============
 
-#. If you want to sync this with an XCore open source repository you
-   need to request a new repo with the same name (see https://github.com/xcore/Community/wiki/Repository-management on how 
-   to do this) to share this with the world.Now you can stage all the new files and do the repositories first commit and push it to a newly created github repo with the same name. You can do that like this::
+* Two warnings produced in XDE 11.2 related to buffered port
+* Untested since moving to XDE 11.2
 
-	git add -A
-	git commit -am "First commit"
-	git push -u origin master
+Required Repositories
+=====================
 
-#. Now you can remove this README.rst file, rename the README_template.rst file to README.rst, and fill in the blanks. Use ``git commit`` and ``git push`` as normal.
+* xcommon git\@github.com:xcore/xcommon.git
 
+Support
+=======
 
-
+Issues may be submitted via the Issues tab in this github repo. Response to any issues submitted are at the discretion of the maintainer of this component.
